@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootPackageDirectory>$(OutputPath)\package</RootPackageDirectory>
     <ZipPackagePath>$(OutputPath)\$(MSBuildThisFileName).zip</ZipPackagePath>
   </PropertyGroup>
@@ -23,12 +23,10 @@
     To add a new Azure Function, add to both the `AzureFunction` and `ProjectReference` item collections below.
 
     -->
-    <AzureFunction Include="GitHubAutoMergePRs" TargetFramework="net46" />
-    <AzureFunction Include="GitHubCreateMergePRs" TargetFramework="net46" />
-    <AzureFunction Include="VstsCreateMergePRs" TargetFramework="net46" />
-    <ProjectReference Include="Functions\GitHubAutoMergePRs\GitHubAutoMergePRs.csproj" />
-    <ProjectReference Include="Functions\GitHubCreateMergePRs\GitHubCreateMergePRs.csproj" />
-    <ProjectReference Include="Functions\VstsCreateMergePRs\VstsCreateMergePRs.csproj" />
+    <AzureFunction Include="GitHubCreateMergePRs" TargetFramework="netcoreapp2.1" />
+    <!--<ProjectReference Include="FunctionsV2\GitHubAutoMergePRs\GitHubAutoMergePRs.csproj" />-->
+    <ProjectReference Include="FunctionsV2\GithubCreateMergePRs\GitHubCreateMergePRs.csproj" />
+    <!--<ProjectReference Include="FunctionsV2\VstsCreateMergePRs\VstsCreateMergePRs.csproj" />-->
   </ItemGroup>
 
   <Target Name="PreparePackageDirectory">
@@ -36,8 +34,7 @@
     <MakeDir Directories="$(RootPackageDirectory)" />
   </Target>
 
-  <Target Name="CopyPackageFiles"
-          DependsOnTargets="PreparePackageDirectory">
+  <Target Name="CopyPackageFiles" DependsOnTargets="PreparePackageDirectory">
     <ItemGroup>
       <FilesToCopy Remove="**" />
       <FilesToCopy Include="host.json" />
@@ -46,13 +43,10 @@
     <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(RootPackageDirectory)" />
   </Target>
 
-  <Target Name="CopyPackageFunctionFiles"
-          Inputs="@(AzureFunction)"
-          Outputs="$(RootPackageDirectory)\%(AzureFunction.Identity)"
-          DependsOnTargets="PreparePackageDirectory">
+  <Target Name="CopyPackageFunctionFiles" Inputs="@(AzureFunction)" Outputs="$(RootPackageDirectory)\%(AzureFunction.Identity)" DependsOnTargets="PreparePackageDirectory">
     <ItemGroup>
       <FilesToCopy Remove="**" />
-      <FilesToCopy Include="$(ArtifactsBinDir)%(AzureFunction.Identity)\$(Configuration)\%(AzureFunction.TargetFramework)\AzureFunctionFiles\**" />
+      <FilesToCopy Include="$(ArtifactsBinDir)%(AzureFunction.Identity)\$(Configuration)\%(AzureFunction.TargetFramework)\**" />
       <FileWrites Include="@(FilesToCopy)" />
     </ItemGroup>
     <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(RootPackageDirectory)\%(AzureFunction.Identity)" />
@@ -65,15 +59,12 @@
     <Error Text="Azure Functions not found at '$(RootPackageDirectory)', check the body of the `CopyPackageFunctionFiles` target.  Missing functions: @(MissingFunctions)" Condition="'@(MissingFunctions)' != ''" />
   </Target>
 
-  <Target Name="CreateZipPackage"
-          AfterTargets="Build"
-          DependsOnTargets="CopyPackageFiles;CopyPackageFunctionFiles;EnsurePackageSourceHasAllFunctions"
-          Outputs="$(ZipPackagePath)">
+  <Target Name="CreateZipPackage" AfterTargets="Build" DependsOnTargets="CopyPackageFiles;CopyPackageFunctionFiles;EnsurePackageSourceHasAllFunctions" Outputs="$(ZipPackagePath)">
     <ItemGroup>
       <FileWrites Include="$(ZipPackagePath)" />
     </ItemGroup>
     <Delete Files="$(ZipPackagePath)" Condition="Exists('$(ZipPackagePath)')" />
-    <Exec Command='powershell -noprofile -executionPolicy RemoteSigned -file "$(MSBuildThisFileDirectory)CreateZipPackage.ps1" -sourceDirectoryName "$(RootPackageDirectory)" -destinationArchiveFileName "$(ZipPackagePath)"' />
+    <Exec Command="powershell -noprofile -executionPolicy RemoteSigned -file &quot;$(MSBuildThisFileDirectory)CreateZipPackage.ps1&quot; -sourceDirectoryName &quot;$(RootPackageDirectory)&quot; -destinationArchiveFileName &quot;$(ZipPackagePath)&quot;" />
   </Target>
 
 </Project>
