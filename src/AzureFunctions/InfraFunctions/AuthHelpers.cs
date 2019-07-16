@@ -2,9 +2,9 @@ using Microsoft.Azure.KeyVault;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Threading.Tasks;
 
-namespace AzureFunctionsCommon
+namespace InfraFunctions
 {
-    public static class AuthHelpers
+    internal static class AuthHelpers
     {
         private const string KeyVaultUrl = "https://roslyninfra.vault.azure.net:443";
 

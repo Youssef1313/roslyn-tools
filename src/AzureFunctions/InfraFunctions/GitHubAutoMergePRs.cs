@@ -3,28 +3,22 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
-using AzureFunctionsCommon;
 
-namespace GithubCreateMergePR
+namespace InfraFunctions
 {
-    public static class MergePRFunction
+    public static class GitHubAutoMergePRs
     {
-        [FunctionName("MergePRFunction")]
-        public static void Run([TimerTrigger("0 */1 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
+        [FunctionName("GithubAutoMergePRs")]
+        public static void Run([TimerTrigger("0 */30 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-
-            RunAsync(log, context).GetAwaiter().GetResult();
         }
-
 
         private static async Task RunAsync(ILogger log, ExecutionContext context)
         {
-            var pass = await AuthHelpers.GetSecret("dotnet-automerge-bot-token");
-            var gh = new GithubMergeTool.GithubMergeTool("dotnet-automerge-bot@users.noreply.github.com", pass);
-            var configPath = Path.Combine(context.FunctionDirectory, "..", "config.xml");
+            var gh = new GithubMergeTool.GithubMergeTool("dotnet-automerge-bot@users.noreply.github.com", await AuthHelpers.GetSecret("dotnet-automerge-bot-token"));
+            var configPath = Path.Combine(context.FunctionDirectory, "config.xml");
             var config = XDocument.Load(configPath).Root;
             foreach (var repo in config.Elements("repo"))
             {
@@ -64,9 +58,9 @@ namespace GithubCreateMergePR
                     }
                     catch (Exception ex)
                     {
-                       // If a specific merge fails, we don't want to fail all merges. Log the exception
-                       // and continue trying to merge other PRs 
-                       log.LogError(ex, $"Encountered exception while merging '{prIdentifier}'");
+                        // If a specific merge fails, we don't want to fail all merges. Log the exception
+                        // and continue trying to merge other PRs 
+                        log.LogError(ex);
                     }
 
                     // Delay in order to avoid triggering GitHub rate limiting
