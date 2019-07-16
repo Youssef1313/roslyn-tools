@@ -229,7 +229,7 @@ Once all conflicts are resolved and all the tests pass, you are free to merge th
 
             var prInfo = JObject.Parse(await prResponse.Content.ReadAsStringAsync());
             if ((string)prInfo["state"] != "open" ||
-                ((string)prInfo["mergeable"]).ToLower() != "true")
+                ((string)prInfo["mergeable"])?.ToLower() != "true")
             {
                 return (false, "PR is not open or not mergeable", null);
             }

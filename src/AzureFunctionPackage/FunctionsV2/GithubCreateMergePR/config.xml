@@ -1,0 +1,112 @@
+<config>
+  <repo owner="dotnet" name="roslyn">
+    <!-- Roslyn branches (non-vs-deps) (flowing between releases) -->
+    <merge from="dev15.0.x" to="dev15.9.x" />
+    <merge from="dev15.9.x" to="dev16.0" />
+    <merge from="dev16.0" to="release/dev16.1" />
+    <merge from="release/dev16.1" to="release/dev16.2" />
+    <merge from="release/dev16.2" to="release/dev16.3-preview1" />
+    <merge from="release/dev16.3-preview1" to="master" />
+
+    <!-- Roslyn branches (between vs-deps branches) -->
+    <merge from="dev15.0.x-vs-deps" to="dev15.9.x-vs-deps" />
+    <merge from="dev15.9.x-vs-deps" to="dev16.0-vs-deps" />
+    <merge from="dev16.0-vs-deps" to="release/dev16.1-vs-deps" />
+    <merge from="release/dev16.1-vs-deps" to="release/dev16.2-vs-deps" />
+    <merge from="release/dev16.2-vs-deps" to="release/dev16.3-preview1-vs-deps" />
+    <merge from="release/dev16.3-preview1-vs-deps" to="master-vs-deps" />
+      
+    <!-- Roslyn branches (from non-vs-deps to vs-deps) -->
+    <merge from="dev15.0.x" to="dev15.0.x-vs-deps" />
+    <merge from="dev15.9.x" to="dev15.9.x-vs-deps" />
+    <merge from="dev16.0" to="dev16.0-vs-deps" />
+    <merge from="release/dev16.1" to="release/dev16.1-vs-deps" />
+    <merge from="release/dev16.2" to="release/dev16.2-vs-deps" />
+    <merge from="release/dev16.3-preview1" to="release/dev16.3-preview1-vs-deps" />
+    <merge from="master" to="master-vs-deps" />
+
+    <!-- Feature branches -->
+    <merge from="master" to="features/lspSupport" owners="hechang,dabarbet" />
+    <merge from="master-vs-deps" to="features/razorSupport2" owners="hechang" />
+    <merge from="master" to="features/NullableDogfood" owners="chucks" frequency="weekly" />
+    <merge from="master" to="demos/records" owners="angocke" />
+    <merge from="master" to="features/param-nullchecking" owners="t-laro" />
+  </repo>
+  <repo owner="dotnet" name="roslyn-sdk">
+    <merge from="dev16.0.x" to="master" />
+  </repo>
+  <repo owner="dotnet" name="project-system">
+    <merge from="dev15.0.x" to="dev15.9.x" />
+    <merge from="dev15.9.x" to="dev16.0.x" />
+    <merge from="dev16.0.x" to="dev16.1.x" />
+    <merge from="dev16.1.x" to="dev16.2.x" />
+    <merge from="dev16.2.x" to="dev16.3.x" />
+    <merge from="dev16.3.x" to="master" />
+    <merge from="master" to="feature/integration-tests" />
+    <merge from="master" to="feature/TempPE" />
+  </repo>
+  <repo owner="dotnet" name="cli">
+    <merge from="release/2.0.0" to="release/2.1.1xx" />
+    <merge from="release/2.1.1xx" to="release/2.1.2xx" />
+    <merge from="release/2.1.2xx" to="release/2.1.3xx" />
+    <merge from="release/2.1.3xx" to="release/2.1.4xx" />
+    <merge from="release/2.1.4xx" to="release/2.1.5xx" />
+    <merge from="release/2.1.5xx" to="release/2.1.6xx" />
+    <merge from="release/2.1.5xx" to="release/2.2.1xx" />
+    <merge from="release/2.2.1xx" to="release/2.2.2xx" />
+    <merge from="release/2.1.6xx" to="release/2.2.2xx" />
+    <merge from="release/2.2.2xx" to="release/3.0.1xx" />
+    <merge from="release/3.0.1xx" to="master" />
+  </repo>
+  <repo owner="dotnet" name="sdk">
+    <merge from="release/2.0.0" to="release/2.1" />
+    <merge from="release/2.1" to="release/2.1.1xx" />
+    <merge from="release/2.1.1xx" to="release/2.1.2xx" />
+    <merge from="release/2.1.2xx" to="release/2.1.3xx" />
+    <merge from="release/2.1.3xx" to="release/2.1.4xx" />
+    <merge from="release/2.1.4xx" to="release/2.1.5xx" />
+    <merge from="release/2.1.5xx" to="release/2.1.6xx" />
+    <merge from="release/2.1.5xx" to="release/2.2.1xx" />
+    <merge from="release/2.2.1xx" to="release/2.2.2xx" />
+    <merge from="release/2.1.6xx" to="release/2.2.2xx" />
+    <merge from="release/2.2.2xx" to="release/3.0.1xx" />
+    <merge from="release/3.0.1xx" to="master" />
+  </repo>
+  <repo owner="dotnet" name="toolset">
+    <merge from="release/3.0.1xx" to="master" />
+  </repo>
+  <repo owner="dotnet" name="core-sdk">
+    <merge from="release/3.0.1xx" to="master" />
+  </repo>
+  <repo owner="dotnet" name="fsharp">
+    <!-- shipped branches back to master -->
+    <merge from="dev16.0" to="master" />
+
+    <!-- regular branch flow -->
+    <merge from="release/dev16.2" to="release/dev16.3" />
+    <merge from="master" to="release/dev16.3" />
+    <merge from="master" to="feature/nullness" />
+    <merge from="master" to="feature/ext" />
+    <merge from="master" to="feature/witness-passing" />
+    <merge from="master" to="feature/tasks" />
+      
+    <!-- language versions -->
+    <merge from="release/fsharp47" to="release/dev16.3" />
+    <merge from="release/dev16.3" to="release/fsharp5" />
+  </repo>
+    
+  <!-- roslyn-analyzer branches -->
+  <repo owner="dotnet" name="roslyn-analyzers">
+    <merge from="master" to="3.x" />
+  </repo>
+    
+  <!-- testimpact branches -->
+  <repo owner="dotnet" name="testimpact">
+    <merge from="dev16.2.x" to="master" />
+  </repo>
+    
+  <!-- msbuild language service branches -->
+  <repo owner="dotnet" name="msbuild-language-service">
+    <merge from="master" to="dev/prototype" />
+  </repo>
+</config>
