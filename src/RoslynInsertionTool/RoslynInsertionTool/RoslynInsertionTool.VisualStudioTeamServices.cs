@@ -311,6 +311,8 @@ namespace Roslyn.Insertion
 
             Stopwatch watch = Stopwatch.StartNew();
 
+            var art1 = await buildClient.GetArtifactAsync(Options.TFSProjectName, build.Id, artifact.Name, cancellationToken);
+            
             using (Stream s = await buildClient.GetArtifactContentZipAsync(Options.TFSProjectName, build.Id, artifact.Name, cancellationToken))
             using (MemoryStream ms = new MemoryStream())
             {
